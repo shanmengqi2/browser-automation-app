@@ -31,7 +31,10 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ClerkProvider appearance={{ theme: shadcn }}>
+        <ClerkProvider
+          appearance={{ theme: shadcn }}
+          taskUrls={{ "choose-organization": "/choose-organization" }}
+        >
           <ThemeProvider>
             {/*<header className="border-b">
               <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
