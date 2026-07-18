@@ -7,11 +7,6 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { cn } from "@/lib/utils"
 
-import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
-import { Bot } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 const fontMono = Geist_Mono({
@@ -38,7 +33,7 @@ export default function RootLayout({
       <body>
         <ClerkProvider appearance={{ theme: shadcn }}>
           <ThemeProvider>
-            <header className="border-b">
+            {/*<header className="border-b">
               <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
                 <div className="flex items-center gap-2 font-medium">
                   <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
@@ -61,7 +56,7 @@ export default function RootLayout({
                   </Show>
                 </div>
               </div>
-            </header>
+            </header>*/}
             {children}
             <Toaster />
           </ThemeProvider>
