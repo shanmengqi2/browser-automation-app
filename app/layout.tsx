@@ -36,30 +36,6 @@ export default function RootLayout({
           taskUrls={{ "choose-organization": "/choose-organization" }}
         >
           <ThemeProvider>
-            {/*<header className="border-b">
-              <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-                <div className="flex items-center gap-2 font-medium">
-                  <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                    <Bot className="size-4" />
-                  </span>
-                  Browser Automation
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Show when="signed-out">
-                    <SignInButton mode="modal">
-                      <Button variant="ghost">登录</Button>
-                    </SignInButton>
-                    <SignUpButton mode="modal">
-                      <Button>创建账号</Button>
-                    </SignUpButton>
-                  </Show>
-                  <Show when="signed-in">
-                    <UserButton />
-                  </Show>
-                </div>
-              </div>
-            </header>*/}
             {children}
             <Toaster />
           </ThemeProvider>
