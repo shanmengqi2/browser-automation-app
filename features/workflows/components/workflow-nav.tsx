@@ -21,20 +21,25 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-const workflows = [
-  "dominant-wasp",
-  "honest-reindeer",
-  "expected-llama",
-  "essential-ocelot",
-  "creepy-echidna",
-  "eastern-silkworm",
-  "cultural-lion",
-  "proud-weasel",
-  "regional-bonobo",
-]
+import { generateSlug } from "@/features/workflows/lib/generate-slug"
+import type { Workflow as Wf } from "@/lib/db/schema"
+import { useTransition } from "react"
 
-function WorkflowNav() {
+type WorkflowNavProps = {
+  workflows: Wf[]
+  createWorkflow: (name: string) => Promise<void>
+}
+
+function WorkflowNav({ workflows, createWorkflow }: WorkflowNavProps) {
   const { state } = useSidebar()
+
+  const [isPending, startTransition] = useTransition()
+
+  const handleCreate = () => {
+    startTransition(async () => {
+      await createWorkflow(generateSlug())
+    })
+  }
 
   if (state === "collapsed") {
     return (
@@ -57,14 +62,20 @@ function WorkflowNav() {
             </PopoverHeader>
             <SidebarMenu>
               {workflows.map((workflow, index) => (
-                <SidebarMenuItem key={workflow}>
+                <SidebarMenuItem key={workflow.id}>
                   <SidebarMenuButton isActive={index === 0}>
-                    <span>{workflow}</span>
+                    <span>{workflow.name}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
-            <Button variant="outline" size="sm" className="w-full">
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full"
+              onClick={handleCreate}
+              disabled={isPending}
+            >
               <Plus data-icon="inline-start" />
               New workflow
             </Button>
@@ -82,6 +93,7 @@ function WorkflowNav() {
       <SidebarGroupAction
         title="New workflow"
         className="top-3 right-4 size-8 text-white hover:bg-white/10 hover:text-white"
+        onClick={handleCreate}
       >
         <Plus />
         <span className="sr-only">New workflow</span>
@@ -89,13 +101,13 @@ function WorkflowNav() {
       <SidebarGroupContent>
         <SidebarMenu className="gap-y-0.5">
           {workflows.map((workflow, index) => (
-            <SidebarMenuItem key={workflow}>
+            <SidebarMenuItem key={workflow.id}>
               <SidebarMenuButton
                 isActive={index === 0}
-                tooltip={workflow}
+                tooltip={workflow.name}
                 className="h-11 rounded-xl px-3 text-base text-white/90 hover:bg-white/10 hover:text-white data-active:bg-white/10 data-active:text-white"
               >
-                <span>{workflow}</span>
+                <span>{workflow.name}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
