@@ -4,6 +4,9 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
 
+import { runWorkflowAction } from "@/features/workflows/actions"
+import { RightSidebar } from "@/features/workflows/components/right-sidebar"
+
 function WorkflowShell({ workflowId }: { workflowId: string }) {
   return (
     <ResizablePanelGroup
@@ -27,14 +30,7 @@ function WorkflowShell({ workflowId }: { workflowId: string }) {
         </ResizablePanelGroup>
       </ResizablePanel>
       <ResizableHandle />
-      <ResizablePanel
-        defaultSize="16rem"
-        minSize="14rem"
-        maxSize="36rem"
-        className="flex items-center justify-center"
-      >
-        <span>Inspector</span>
-      </ResizablePanel>
+      <RightSidebar workflowId={workflowId} runWorkflow={runWorkflowAction} />
     </ResizablePanelGroup>
   )
 }
