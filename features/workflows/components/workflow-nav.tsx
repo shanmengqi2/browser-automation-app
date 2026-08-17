@@ -1,6 +1,8 @@
 "use client"
 
 import { Plus, Workflow } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -32,6 +34,7 @@ type WorkflowNavProps = {
 
 function WorkflowNav({ workflows, createWorkflow }: WorkflowNavProps) {
   const { state } = useSidebar()
+  const pathname = usePathname()
 
   const [isPending, startTransition] = useTransition()
 
@@ -61,10 +64,15 @@ function WorkflowNav({ workflows, createWorkflow }: WorkflowNavProps) {
               <PopoverTitle>Workflows</PopoverTitle>
             </PopoverHeader>
             <SidebarMenu>
-              {workflows.map((workflow, index) => (
+              {workflows.map((workflow) => (
                 <SidebarMenuItem key={workflow.id}>
-                  <SidebarMenuButton isActive={index === 0}>
-                    <span>{workflow.name}</span>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === `/workflows/${workflow.id}`}
+                  >
+                    <Link href={`/workflows/${workflow.id}`}>
+                      <span>{workflow.name}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -100,14 +108,17 @@ function WorkflowNav({ workflows, createWorkflow }: WorkflowNavProps) {
       </SidebarGroupAction>
       <SidebarGroupContent>
         <SidebarMenu className="gap-y-0.5">
-          {workflows.map((workflow, index) => (
+          {workflows.map((workflow) => (
             <SidebarMenuItem key={workflow.id}>
               <SidebarMenuButton
-                isActive={index === 0}
+                asChild
+                isActive={pathname === `/workflows/${workflow.id}`}
                 tooltip={workflow.name}
                 className="h-11 rounded-xl px-3 text-base text-white/90 hover:bg-white/10 hover:text-white data-active:bg-white/10 data-active:text-white"
               >
-                <span>{workflow.name}</span>
+                <Link href={`/workflows/${workflow.id}`}>
+                  <span>{workflow.name}</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
