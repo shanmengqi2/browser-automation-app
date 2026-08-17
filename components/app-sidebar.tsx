@@ -21,7 +21,7 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       variant="inset"
       collapsible="icon"
       {...props}
-      className="border-white/5 bg-[#1f1f1f] text-white"
+      className="border-sidebar-border"
     >
       <SidebarHeader className="flex-row items-center gap-4 px-4 py-5 group-data-[collapsible=icon]:px-2">
         <OrganizationSwitcher
@@ -30,11 +30,11 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             elements: {
               rootBox: "min-w-0 group-data-[collapsible=icon]:hidden!",
               organizationSwitcherTrigger:
-                "w-full justify-start border-0 bg-transparent px-0 text-white shadow-none hover:bg-white/5 hover:text-white",
+                "w-full justify-start border-0 bg-transparent px-0 text-sidebar-foreground shadow-none hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
             },
           }}
         />
-        <SidebarTrigger className="shrink-0 text-white hover:bg-white/10 hover:text-white" />
+        <SidebarTrigger className="shrink-0 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" />
       </SidebarHeader>
 
       <SidebarContent>
@@ -46,7 +46,7 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           appearance={{
             elements: {
               userButtonTrigger:
-                "w-full justify-start rounded-xl px-2 text-white hover:bg-white/10 hover:text-white",
+                "w-full justify-start rounded-xl px-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
             },
           }}
         />

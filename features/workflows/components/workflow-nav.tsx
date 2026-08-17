@@ -51,7 +51,7 @@ function WorkflowNav({ workflows, createWorkflow }: WorkflowNavProps) {
           <PopoverTrigger asChild>
             <SidebarMenuButton
               tooltip="Workflows"
-              className="text-white hover:bg-white/10 hover:text-white"
+              className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             >
               <Workflow />
               <span className="group-data-[collapsible=icon]:hidden">
@@ -69,6 +69,7 @@ function WorkflowNav({ workflows, createWorkflow }: WorkflowNavProps) {
                   <SidebarMenuButton
                     asChild
                     isActive={pathname === `/workflows/${workflow.id}`}
+                    className="text-foreground hover:bg-accent hover:text-accent-foreground data-active:bg-accent data-active:text-accent-foreground"
                   >
                     <Link href={`/workflows/${workflow.id}`}>
                       <span>{workflow.name}</span>
@@ -95,12 +96,12 @@ function WorkflowNav({ workflows, createWorkflow }: WorkflowNavProps) {
 
   return (
     <SidebarGroup className="px-4 py-2 group-data-[collapsible=icon]:px-2">
-      <SidebarGroupLabel className="h-10 px-2 text-lg font-medium text-white/70 group-data-[collapsible=icon]:hidden">
+      <SidebarGroupLabel className="h-10 px-2 text-lg font-medium text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
         Workflows
       </SidebarGroupLabel>
       <SidebarGroupAction
         title="New workflow"
-        className="top-3 right-4 size-8 text-white hover:bg-white/10 hover:text-white"
+        className="top-3 right-4 size-8 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         onClick={handleCreate}
       >
         <Plus />
@@ -114,7 +115,7 @@ function WorkflowNav({ workflows, createWorkflow }: WorkflowNavProps) {
                 asChild
                 isActive={pathname === `/workflows/${workflow.id}`}
                 tooltip={workflow.name}
-                className="h-11 rounded-xl px-3 text-base text-white/90 hover:bg-white/10 hover:text-white data-active:bg-white/10 data-active:text-white"
+                className="h-11 rounded-xl px-3 text-base text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground"
               >
                 <Link href={`/workflows/${workflow.id}`}>
                   <span>{workflow.name}</span>
