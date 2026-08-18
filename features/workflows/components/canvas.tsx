@@ -11,6 +11,7 @@ import {
   type Edge,
   type Node,
   type OnConnect,
+  NodeTypes,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 import { useTheme } from "next-themes"
@@ -18,30 +19,20 @@ import { useCallback, useSyncExternalStore } from "react"
 
 import { ResizablePanel } from "@/components/ui/resizable"
 
-const initialNodes: Node[] = [
+import { StepNode } from "@/features/workflows/components/step-node"
+import type { StepNodeType } from "@/features/workflows/nodes/node-registry"
+const nodeTypes: NodeTypes = { step: StepNode }
+
+const initialNodes: StepNodeType[] = [
   {
     id: "start",
-    type: "input",
+    type: "step",
     position: { x: 0, y: 0 },
-    data: { label: "Start" },
-  },
-  {
-    id: "process",
-    position: { x: 200, y: 100 },
-    data: { label: "Process" },
-  },
-  {
-    id: "end",
-    type: "output",
-    position: { x: 400, y: 0 },
-    data: { label: "End" },
+    data: { type: "start", kind: "trigger", title: "Start", values: {} },
   },
 ]
 
-const initialEdges: Edge[] = [
-  { id: "start-process", source: "start", target: "process" },
-  { id: "process-end", source: "process", target: "end" },
-]
+const initialEdges: Edge[] = []
 
 const emptySubscribe = () => () => {}
 
@@ -65,6 +56,7 @@ function Canvas() {
     <ResizablePanel minSize="18rem" className="relative">
       <div className="size-full">
         <ReactFlow
+          nodeTypes={nodeTypes}
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
