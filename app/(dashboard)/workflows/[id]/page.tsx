@@ -1,6 +1,5 @@
-import { notFound } from "next/navigation"
-
 import { WorkflowShell } from "@/features/workflows/components/workflow-shell"
+import { Room } from "@/features/workflows/components/room"
 
 export default async function Page({
   params,
@@ -12,5 +11,9 @@ export default async function Page({
   // throw new Error("abc")
   // notFound()
 
-  return <WorkflowShell workflowId={id} />
+  return (
+    <Room roomId={id}>
+      <WorkflowShell workflowId={id} />
+    </Room>
+  )
 }

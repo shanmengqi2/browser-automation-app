@@ -1,21 +1,19 @@
 "use client"
 
 import {
-  addEdge,
   Background,
   Controls,
   ReactFlow,
-  useEdgesState,
-  useNodesState,
   ConnectionLineType,
   type Edge,
-  type Node,
-  type OnConnect,
   NodeTypes,
 } from "@xyflow/react"
+import { useLiveblocksFlow, Cursors } from "@liveblocks/react-flow"
 import "@xyflow/react/dist/style.css"
+import "@liveblocks/react-ui/styles.css"
+import "@liveblocks/react-flow/styles.css"
 import { useTheme } from "next-themes"
-import { useCallback, useSyncExternalStore } from "react"
+import { useSyncExternalStore } from "react"
 
 import { ResizablePanel } from "@/components/ui/resizable"
 
@@ -43,14 +41,13 @@ function Canvas() {
     () => true,
     () => false
   )
-  const [nodes, , onNodesChange] = useNodesState(initialNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
-  const onConnect: OnConnect = useCallback(
-    (connection) =>
-      setEdges((currentEdges) => addEdge(connection, currentEdges)),
-    [setEdges]
-  )
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, onDelete } =
+    useLiveblocksFlow({
+      suspense: true,
+      nodes: { initial: initialNodes },
+      edges: { initial: initialEdges },
+    })
 
   return (
     <ResizablePanel minSize="18rem" className="relative">
@@ -62,6 +59,7 @@ function Canvas() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          onDelete={onDelete}
           fitView
           colorMode={mounted && resolvedTheme === "dark" ? "dark" : "light"}
           connectionLineType={ConnectionLineType.SmoothStep}
@@ -81,6 +79,7 @@ function Canvas() {
         >
           <Background />
           <Controls />
+          <Cursors />
         </ReactFlow>
       </div>
     </ResizablePanel>
