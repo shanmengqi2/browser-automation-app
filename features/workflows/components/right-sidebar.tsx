@@ -1,7 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { useReactFlow, useStoreApi } from "@xyflow/react"
 import { MoreHorizontal, Play, Trash2 } from "lucide-react"
+import { toast } from "sonner"
 
 import {
   Accordion,
@@ -158,9 +160,43 @@ const definitions = Object.values(nodeRegistry)
 
 // The Toolbar tab: a button per node type that adds it to the canvas.
 function Palette() {
+  // The provider wrapping the page (see the workflow route) lets us reach the
+  // same store the canvas renders from, even though the palette sits outside it.
+  const { addNodes, getNodes } = useReactFlow<StepNodeType>()
+  const store = useStoreApi()
+
   const add = (type: NodeType) => {
-    // TODO: add the clicked node to the canvas (one trigger max).
-    void type
+    const def = nodeRegistry[type]
+    const nodes = getNodes()
+
+    // Only one trigger is allowed — the graph has a single entry point.
+    if (def.kind === "trigger" && nodes.some((n) => n.data.kind === "trigger")) {
+      toast.error("A trigger already exists", {
+        description: "A workflow can only have one trigger node.",
+      })
+      return
+    }
+
+    // Number repeats of the same type (Open URL 1, Open URL 2, …) so identical
+    // nodes stay easy to tell apart. Count by type to keep the label stable.
+    const sameType = nodes.filter((n) => n.data.type === type).length
+    const title = sameType === 0 ? def.label : `${def.label} ${sameType + 1}`
+
+    // Drop the node at the center of the current view. Convert the pane's center
+    // (in screen space) to flow coordinates using the live viewport transform.
+    const { width, height, transform } = store.getState()
+    const [tx, ty, zoom] = transform
+    const position = {
+      x: (width / 2 - tx) / zoom,
+      y: (height / 2 - ty) / zoom,
+    }
+
+    addNodes({
+      id: crypto.randomUUID(),
+      type: "step",
+      position,
+      data: { type, kind: def.kind, title, values: {} },
+    })
   }
 
   return (

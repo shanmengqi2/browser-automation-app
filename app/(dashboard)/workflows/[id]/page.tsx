@@ -1,3 +1,5 @@
+import { ReactFlowProvider } from "@xyflow/react"
+
 import { WorkflowShell } from "@/features/workflows/components/workflow-shell"
 import { Room } from "@/features/workflows/components/room"
 import { auth } from "@clerk/nextjs/server"
@@ -30,9 +32,14 @@ export default async function Page({
     },
   })
 
+  // The palette lives in the sidebar, outside the canvas's <ReactFlow>. Wrap the
+  // whole page in a provider so the canvas and sidebar share one React Flow store
+  // and the palette can add nodes to the same graph the canvas renders.
   return (
-    <Room roomId={id}>
-      <WorkflowShell workflowId={id} />
-    </Room>
+    <ReactFlowProvider>
+      <Room roomId={id}>
+        <WorkflowShell workflowId={id} />
+      </Room>
+    </ReactFlowProvider>
   )
 }
