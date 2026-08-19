@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useReactFlow, useStoreApi } from "@xyflow/react"
+import { useReactFlow, useStore, useStoreApi } from "@xyflow/react"
 import { MoreHorizontal, Play, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 
@@ -170,7 +170,10 @@ function Palette() {
     const nodes = getNodes()
 
     // Only one trigger is allowed — the graph has a single entry point.
-    if (def.kind === "trigger" && nodes.some((n) => n.data.kind === "trigger")) {
+    if (
+      def.kind === "trigger" &&
+      nodes.some((n) => n.data.kind === "trigger")
+    ) {
       toast.error("A trigger already exists", {
         description: "A workflow can only have one trigger node.",
       })
@@ -289,8 +292,8 @@ function RunButton() {
 export function RightSidebar() {
   const [tab, setTab] = useState("toolbar")
 
-  // TODO: read the currently selected node from React Flow.
-  const selected: StepNodeType | undefined = undefined
+  const selected = useStore((s) => s.nodes.find((n) => n.selected)) as
+    StepNodeType | undefined
 
   // TODO: auto-switch to the Editor tab when the selection changes.
 
