@@ -7,6 +7,7 @@ import {
   ConnectionLineType,
   type Edge,
   NodeTypes,
+  Panel,
 } from "@xyflow/react"
 import { useLiveblocksFlow, Cursors } from "@liveblocks/react-flow"
 import "@xyflow/react/dist/style.css"
@@ -14,6 +15,7 @@ import "@liveblocks/react-ui/styles.css"
 import "@liveblocks/react-flow/styles.css"
 import { useTheme } from "next-themes"
 import { useSyncExternalStore } from "react"
+import { AvatarStack } from "@liveblocks/react-ui"
 
 import { ResizablePanel } from "@/components/ui/resizable"
 
@@ -80,6 +82,9 @@ function Canvas() {
           <Background />
           <Controls />
           <Cursors />
+          <Panel position="top-right">
+            <AvatarStack />
+          </Panel>
         </ReactFlow>
       </div>
     </ResizablePanel>
