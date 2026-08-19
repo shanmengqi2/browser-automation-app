@@ -15,10 +15,7 @@ export function Room({
   children: ReactNode
 }) {
   return (
-    <LiveblocksProvider
-      publicApiKey={process.env.NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY!}
-      throttle={16}
-    >
+    <LiveblocksProvider authEndpoint="/api/liveblocks/auth" throttle={16}>
       <RoomProvider id={roomId}>
         <ClientSideSuspense fallback={<div>Loading…</div>}>
           {children}

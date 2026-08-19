@@ -1,5 +1,9 @@
 import { WorkflowShell } from "@/features/workflows/components/workflow-shell"
 import { Room } from "@/features/workflows/components/room"
+import { auth } from "@clerk/nextjs/server"
+import { notFound } from "next/navigation"
+import { getWorkflow } from "@/features/workflows/data"
+import { liveblocks } from "@/lib/liveblocks"
 
 export default async function Page({
   params,
@@ -7,9 +11,23 @@ export default async function Page({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  const { orgId } = await auth()
+  if (!orgId) notFound()
 
-  // throw new Error("abc")
-  // notFound()
+  const workflow = await getWorkflow(orgId, id)
+  if (!workflow) notFound()
+
+  // Ensure the Liveblocks room exists and grant write access to the org.
+  // The org ID matches the `groupIds` set in the auth endpoint's ID token.
+  await liveblocks.getOrCreateRoom(id, {
+    defaultAccesses: [],
+    groupsAccesses: {
+      [orgId]: ["room:write"],
+    },
+    metadata: {
+      title: workflow.name,
+    },
+  })
 
   return (
     <Room roomId={id}>
