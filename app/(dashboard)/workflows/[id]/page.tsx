@@ -20,6 +20,7 @@ export default async function Page({
   // Ensure the Liveblocks room exists and grant write access to the org.
   // The org ID matches the `groupIds` set in the auth endpoint's ID token.
   await liveblocks.getOrCreateRoom(id, {
+    organizationId: orgId,
     defaultAccesses: [],
     groupsAccesses: {
       [orgId]: ["room:write"],
