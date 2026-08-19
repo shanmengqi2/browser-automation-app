@@ -1,9 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { useReactFlow, useStore, useStoreApi } from "@xyflow/react"
 import { MoreHorizontal, Play, Trash2 } from "lucide-react"
 import { toast } from "sonner"
+
+import { deleteWorkflowAction } from "@/features/workflows/actions"
 
 import {
   Accordion,
@@ -250,7 +252,19 @@ function Palette() {
 // ---------------------------------------------------------------------------
 
 // The "..." menu for workflow-level actions.
-function ActionsMenu() {
+function ActionsMenu({ workflowId }: { workflowId: string }) {
+  const [isDeleting, startDeleting] = useTransition()
+
+  const deleteWorkflow = () => {
+    // Removes the row (scoped to the org) and its Liveblocks room, then redirects
+    // home. Don't wrap this in try/catch: redirect() throws internally to bail
+    // out, and the transition handles that throw — catching it here would report
+    // a successful delete as a failure.
+    startDeleting(async () => {
+      await deleteWorkflowAction(workflowId)
+    })
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -261,13 +275,17 @@ function ActionsMenu() {
       <DropdownMenuContent align="start" className="min-w-48">
         <DropdownMenuItem
           variant="destructive"
+          disabled={isDeleting}
           className="text-xs [&_svg:not([class*='size-'])]:size-3.5"
-          onSelect={() => {
-            // TODO: delete the workflow, then navigate away.
+          onSelect={(e) => {
+            // Keep the menu from closing so the disabled state stays visible
+            // while the delete is in flight.
+            e.preventDefault()
+            deleteWorkflow()
           }}
         >
           <Trash2 />
-          Delete workflow
+          {isDeleting ? "Deleting…" : "Delete workflow"}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -294,7 +312,13 @@ function RunButton() {
 // The sidebar itself — header on top, then the Toolbar / Editor tabs.
 // ---------------------------------------------------------------------------
 
-export function RightSidebar() {
+export function RightSidebar({
+  workflowId,
+}: {
+  workflowId: string
+  // Passed by the shell for the (not-yet-wired) Run button.
+  runWorkflow?: (workflowId: string) => Promise<unknown>
+}) {
   const [tab, setTab] = useState("toolbar")
 
   const selected = useStore((s) => s.nodes.find((n) => n.selected)) as
@@ -316,7 +340,7 @@ export function RightSidebar() {
     >
       <Tabs value={tab} onValueChange={setTab} className="size-full gap-0">
         <div className="flex items-center justify-between border-b border-border p-2">
-          <ActionsMenu />
+          <ActionsMenu workflowId={workflowId} />
           <RunButton />
         </div>
         <TabsList className="m-2 w-fit bg-background">
