@@ -25,6 +25,9 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     >
       <SidebarHeader className="flex-row items-center gap-4 px-4 py-5 group-data-[collapsible=icon]:px-2">
         <OrganizationSwitcher
+          afterCreateOrganizationUrl="/"
+          afterSelectOrganizationUrl="/"
+          afterLeaveOrganizationUrl="/"
           hidePersonal
           appearance={{
             elements: {
@@ -38,7 +41,10 @@ async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        <WorkflowNav workflows={workflows} createWorkflow={createWorkflowAction} />
+        <WorkflowNav
+          workflows={workflows}
+          createWorkflow={createWorkflowAction}
+        />
       </SidebarContent>
 
       <SidebarFooter className="px-4 py-5 group-data-[collapsible=icon]:px-2">
