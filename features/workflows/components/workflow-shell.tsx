@@ -29,7 +29,7 @@ function WorkflowShell({ workflowId }: { workflowId: string }) {
         </ResizablePanelGroup>
       </ResizablePanel>
       <ResizableHandle />
-      <RightSidebar workflowId={workflowId} runWorkflow={runWorkflowAction} />
+      <RightSidebar workflowId={workflowId} />
     </ResizablePanelGroup>
   )
 }
